@@ -3,6 +3,5 @@ clear
 load sim_data_set.mat;
 %Trace les données sur un graphique
 %[X1,X2,X3,X4]=Recup_Matrice_Classe(R);
-X = R(:,1:2);
 T=R(:,3);
-ToneofK=classes2oneofK(T);
+sub2ind(size(T), (1,1), (:,1))
