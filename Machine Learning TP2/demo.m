@@ -12,16 +12,16 @@ opt.disp = 1;
 %R = R(R(:,3)==1|R(:,3)==2,:);
 %------------------
 %3 K classifier
-R = R(R(:,3)==1|R(:,3)==2|R(:,3)==3,:);
+%R = R(R(:,3)==1|R(:,3)==2|R(:,3)==3,:);
 %------------------
 %Pour Question f en classification binaire
 %Ajout de 10 points (0,5) avec K=1
-%for ii=0:10
-%    Ajout(ii+1,1)=0.2*rand+0;
-%    Ajout(ii+1,2)=0.2*rand+5;
-%    Ajout(ii+1,3)=1;
-%end
-%R=[R;Ajout];
+for ii=0:10
+    Aj(ii+1,1)=0.2*rand+-0.2;
+    Aj(ii+1,2)=0.2*rand+0.2;
+    Aj(ii+1,3)=1;
+end
+R=[R;Aj];
 %--------------------------------------
 [X1, X2, X3, X4] = select_data(R, opt);
 X = R(:,1:2);
@@ -45,3 +45,5 @@ fc2.LevelList = 0;
 f3=@(x,y) w(2,1)-w(3,1)+(w(2,2)-w(3,2))*x+(w(2,3)-w(3,3))*y;
 fc3=fcontour(f3);
 fc3.LevelList = 0;
+%%%%%
+plotdecr(w,min(X(:,1))-1,max(X(:,1))+1,min(X(:,2))-1,max(X(:,2))+1,1000);
