@@ -6,6 +6,10 @@ options.disp = 1;
     %op.disp = 1 -> affichage des nuages de points
 %--------------------------------------
 optimStruct.step = 0.01;
+optimStruct.tolerance=10^-6; 
+optimStruct.nbIteration=10^5;
+optimStruct.gamma=0.01;
+%{
 %Question e----------
 Nb_classes=2;
 [Xe,Te,Re]=Preparation_data(R,Nb_classes);
@@ -27,12 +31,12 @@ Nb_classes=3;
 figure;
 separators(w,Re,Nb_classes);
 %----------Question h------------
-plotdecr(w,min(Xe(:,1))-1,max(Xe(:,1))+1,min(Xe(:,2))-1,max(Xe(:,2))+1,1000);
+plotdecr(w,min(Xe(:,1))-1,max(Xe(:,1))+1,min(Xe(:,2))-1,max(Xe(:,2))+1,100);
 %----------Question i------------
 Nb_classes=4;
 [Xi,Ti,Ri]=Preparation_data(R,Nb_classes);
 [w,~]=fitcls(Xi,Ti);
-plotdecr(w,min(Xi(:,1))-1,max(Xi(:,1))+1,min(Xi(:,2))-1,max(Xi(:,2))+1,1000);
+plotdecr(w,min(Xi(:,1))-1,max(Xi(:,1))+1,min(Xi(:,2))-1,max(Xi(:,2))+1,100);
 %%---------Question j---------------------- 
 Nb_classes=4;
 a=0;b=0.5;K=1;Nb_points=10;
@@ -41,5 +45,14 @@ a=0.2;b=0.2;K=2;
 Rj = add_values_to_R(Rj,a,b,K,Nb_points);
 [Xj,Tj,Rj]=Preparation_data(Rj,Nb_classes);
 [w,~]=fitcls(Xj,Tj);
+size(w)
 plotdecr(w,min(Xj(:,1))-1,max(Xj(:,1))+1,min(Xj(:,2))-1,max(Xj(:,2))+1,1000);
-% -------------------
+%}
+% ---------Question k
+
+Nb_classes=3;
+[Xk,Tk,~]=Preparation_data(R,Nb_classes);
+[Wk, ersub ] = fitclog(Xk, Tk, optimStruct,options);
+plotdecr(Wk',-5,5,-5,5,1000);
+
+
