@@ -28,9 +28,9 @@ function [w,ersub] = fitcls(X,T)
         end
     end
     ersub=ersub/setSize;
-    f=@(x,y) w(1,1)-w(2,1)+(w(1,2)-w(2,2))*x+(w(1,3)-w(2,3))*y;
-    fc=fcontour(f);
-    fc.LevelList = 0;
+    %f=@(x,y) w(1,1)-w(2,1)+(w(1,2)-w(2,2))*x+(w(1,3)-w(2,3))*y;
+    %fc=fcontour(f);
+    %fc.LevelList = 0;
     
 
         

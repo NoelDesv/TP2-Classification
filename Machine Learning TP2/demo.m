@@ -5,26 +5,41 @@ load sim_data_set;
 options.disp = 1;
     %op.disp = 1 -> affichage des nuages de points
 %--------------------------------------
-
 optimStruct.step = 0.01;
-%Corps --------------------------------
-%Initialisation -----
-%Binary classifier
-%R = R(R(:,3)==1|R(:,3)==2,:);
-%------------------
-%3 K classifier
-%R = R(R(:,3)==1|R(:,3)==2|R(:,3)==3,:);
-%------------------
+%Question e----------
+Nb_classes=2;
+[Xe,Te,Re]=Preparation_data(R,Nb_classes);
+[w,~]=fitcls(Xe,Te);
+figure;
+separators(w,Re,Nb_classes);
 %Pour Question f en classification binaire
-%Ajout de 10 points (0,5) avec K=1
-%R = add_values_to_R(R);
-%--------------------------------------
-[X1, X2, X3, X4] = select_data(R, options);
-X = R(:,1:2);
-T = classes2oneofK(R(:,3));
+%Ajout de nbp points (a,b) de classe K
+a=0;b=5;K=1;Nb_points=10;Nb_classes=2;
+Rf = add_values_to_R(R,a,b,K,Nb_points);
+[Xf,Tf,Rf]=Preparation_data(Rf,Nb_classes);
+[w,~]=fitcls(Xf,Tf);
+figure;
+separators(w,Rf,Nb_classes);
+%----------Question G avec fcontour--------------------
+Nb_classes=3;
+[Xe,Te,Re]=Preparation_data(R,Nb_classes);
+[w,~]=fitcls(Xe,Te);
+figure;
+separators(w,Re,Nb_classes);
+%----------Question h------------
+plotdecr(w,min(Xe(:,1))-1,max(Xe(:,1))+1,min(Xe(:,2))-1,max(Xe(:,2))+1,1000);
+%----------Question i------------
+Nb_classes=4;
+[Xi,Ti,Ri]=Preparation_data(R,Nb_classes);
+[w,~]=fitcls(Xi,Ti);
+plotdecr(w,min(Xi(:,1))-1,max(Xi(:,1))+1,min(Xi(:,2))-1,max(Xi(:,2))+1,1000);
+%%---------Question j---------------------- 
+Nb_classes=4;
+a=0;b=0.5;K=1;Nb_points=10;
+Rj = add_values_to_R(R,a,b,K,Nb_points);
+a=0.2;b=0.2;K=2;
+Rj = add_values_to_R(Rj,a,b,K,Nb_points);
+[Xj,Tj,Rj]=Preparation_data(Rj,Nb_classes);
+[w,~]=fitcls(Xj,Tj);
+plotdecr(w,min(Xj(:,1))-1,max(Xj(:,1))+1,min(Xj(:,2))-1,max(Xj(:,2))+1,1000);
 % -------------------
-[w,ersub]=fitcls(X,T);
-%--------------Question e-------------------
-%binary_separators( w );
-[ W, ersub ] = fitclog(X, T, optimStruct);
-

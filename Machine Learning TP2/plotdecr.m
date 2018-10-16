@@ -1,9 +1,7 @@
 function plotdecr(W,minx,maxx,miny,maxy,nbp,tit)
 %Calcul du pas
-pas=(maxx-minx)/(-1+sqrt(nbp))
-disp(pas)
+pas=(maxx-minx)/(-1+sqrt(nbp));
 indice=1;
-
 for ii=0:(maxx-minx)/pas
     for jj=0:(maxy-miny)/pas
     indice=indice+1;
