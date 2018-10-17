@@ -10,8 +10,6 @@ function [ W, ersub ] = fitclog(X, T, optimStruct, options)
         phi(:,ii) = phi(:,ii).*X(:,ii-1);
     end
     W = ones(degree*setSize(2)+1, nbClass);
-    size(phi)
-    disp(W)
     %DESCENTE DE GRADIENT
     ii = 1;
     sensitivity = 1;
@@ -25,11 +23,19 @@ function [ W, ersub ] = fitclog(X, T, optimStruct, options)
         W = W - optimStruct.gamma*grad;
         sensitivity = norm(W - wprev)/norm(W);
         ii = ii + 1;
-        ersub(ii) = 0.5 * norm(phi*W-T);
+        err(ii) = 0.5 * norm(phi*W-T);
         if options.disp == 2 %VISUALISATION DE LA FONCTION D'ERREUR 
-            plot(1:ii,ersub(1:ii))
+            plot(1:ii,err(1:ii))
         end
     end
-
+    y=W*phi';
+    ersub=0;
+    for ii=1:setSize
+        [~,imaxCal]=max(y(1:nbClass,ii));
+        [~ ,imaxReel]= max(T(ii,1:nbClass));
+        if (imaxCal~=imaxReel)
+            ersub=ersub+1;
+        end
+    end
+    ersub=ersub/setSize(1);
 end
-
