@@ -10,7 +10,11 @@ function [ C ] = predcls( X, W )
     for ii=2:nb_entree(2)+1
         XTild(:,ii) = XTild(:,ii).*X(:,ii-1);
     end
-    y=W*XTild';       
+    disp(size(W))
+    disp('oui')
+    disp(size(XTild))
+    disp('non')
+    y=W*XTild';
     for ii=1:setSize
         [~,imaxCal]=max(y(1:nbClass,ii));
         C(ii)=imaxCal;

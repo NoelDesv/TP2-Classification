@@ -15,9 +15,6 @@ function [ W, ersub ] = fitclog(X, T, optimStruct, options)
     sensitivity = 1;
     while (sensitivity>optimStruct.tolerance && ii < optimStruct.nbIteration)
         wprev = W;
-        %disp(phi);
-        %disp(W);
-        %disp(softmax(phi*W));
         grad = (phi')*(softmax(phi*W)-T); 
         %grad = (phi')*(softmax(phi*w)-t);
         W = W - optimStruct.gamma*grad;
@@ -28,10 +25,15 @@ function [ W, ersub ] = fitclog(X, T, optimStruct, options)
             plot(1:ii,err(1:ii))
         end
     end
-    y=W*phi';
+    disp('popo')
+    disp(W)
+    disp(phi)
+    y=phi*W
     ersub=0;
+    disp(setSize);
     for ii=1:setSize
-        [~,imaxCal]=max(y(1:nbClass,ii));
+        disp(ii);
+        [~,imaxCal]=max(y(ii, 1:nbClass));
         [~ ,imaxReel]= max(T(ii,1:nbClass));
         if (imaxCal~=imaxReel)
             ersub=ersub+1;
