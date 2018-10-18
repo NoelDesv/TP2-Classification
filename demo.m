@@ -3,17 +3,13 @@ load sim_data_set;
 
 %Options ------------------------------
 options.disp = 1;
-options.scatter.minx = -5;
-options.scatter.maxx = 5;
-options.scatter.miny = -5;
-options.scatter.maxy = 5;
-options.scatter.nbp = 1000;
     %op.disp = 1 -> affichage des nuages de points
 %--------------------------------------
-optimStruct.step = 0.01;
+optimStruct.step = 0.1;
 optimStruct.tolerance=10^-6; 
 optimStruct.nbIteration=10^5;
 optimStruct.gamma=0.01;
+opt.disp=1;
 %{
 %Question e----------
 Nb_classes=2;
@@ -50,26 +46,75 @@ a=0.2;b=0.2;K=2;
 Rj = add_values_to_R(Rj,a,b,K,Nb_points);
 [Xj,Tj,Rj]=Preparation_data(Rj,Nb_classes);
 [w,~]=fitcls(Xj,Tj);
-size(w)
+
 plotdecr(w,min(Xj(:,1))-1,max(Xj(:,1))+1,min(Xj(:,2))-1,max(Xj(:,2))+1,1000);
-%}
+
 % ---------Question k
-
 Nb_classes=4;
-[X,T,~]=Preparation_data(R,Nb_classes);
-%[ Wk, ersub ] = fitcreglog(Xk, Tk, optimStruct, options);
-%plotdecr(Wk',-5,5,-5,5,1000);
+[Xk,Tk,~]=Preparation_data(R,Nb_classes);
+[Wk, ersub ] = fitclog(Xk, Tk, optimStruct,options);
 
-% -------- Question i
-%L = zeros(Nb_classes);
-%Remplissage de la matrice L
-%for ii = 1:Nb_classes
-%    for jj = 1:Nb_classes
-%        L(ii,jj) = 10.^(-(rand()));
-%    end
-%    L(ii,ii) = 0;
-%end
-%[C] = predclog(Xk,Wk,L);%Peut-être dans le mauvais sens
-methods_comparison(X, T, optimStruct, options);
+plotdecr(Wk,-5,5,-5,5,1000);
+
+[Wk, ~ ] = fitcreglog(Xk, Tk, optimStruct,options);
+plotdecr(Wk,-5,5,-5,5,1000);
+%}
+%Exo 2
+
+load fisheriris;
+Xfleur = meas(:,1:2);
+for ii=1:length(species)
+    if (strcmp('setosa',species(ii))==true)
+        Tfleur(ii,1)=1;
+    end
+    if (strcmp('versicolor',species(ii))==true)
+        Tfleur(ii,1)=2;
+    end
+    if (strcmp(species(ii),'virginica')==true)
+        Tfleur(ii,1)=3;
+    end
+end
+Datafleur=[Xfleur Tfleur];
+[ ~, ~, ~, ~ ] = select_data(Datafleur, opt);
+[w, ersub ] = fitcls(Xfleur, classes2oneofK(Tfleur));
+
+
+TT=classes2oneofK(Tfleur);
+[w, ersub ] = fitclogn(Xfleur, classes2oneofK(Tfleur), optimStruct,options);
+
+plotdecr(w,min(Xfleur(:,1))-1,max(Xfleur(:,1))+1,min(Xfleur(:,2))-1,max(Xfleur(:,2))+1,100);
+e(1)=ersub
+optimStruct.gamma=0.03;
+[~, ersub ] = fitclog(Xfleur, classes2oneofK(Tfleur), optimStruct,options);
+e(2)=ersub;
+optimStruct.gamma=0.1;
+[~, ersub ] = fitclog(Xfleur, classes2oneofK(Tfleur), optimStruct,options);
+e(3)=ersub;
+optimStruct.gamma=0.3;
+[~, ersub ] = fitclog(Xfleur, classes2oneofK(Tfleur), optimStruct,options);
+e(4)=ersub;
+optimStruct.gamma=1;
+[~, ersub ] = fitclog(Xfleur, classes2oneofK(Tfleur), optimStruct,options);
+e(5)=ersub;
+
+%{
+Datafleur=[Xfleur Tfleur];
+[ ~, ~, ~, ~ ] = select_data(Datafleur, opt);
+Regression_type=1;
+[ erreur_total(1)] = Calcul_erreur( Datafleur,Regression_type , optimStruct,options);
+Regression_type=2;
+[ erreur_total(2)] = Calcul_erreur( Datafleur,Regression_type , optimStruct,options);
+disp(erreur_total);
+Regression_type=3;
+[ erreur_total(3)] = Calcul_erreur( Datafleur,Regression_type , optimStruct,options);
+%[w,~]=fitcls(Xfleur,classes2oneofK(Tfleur));
+%figure;
+%plotdecr(w,min(Xfleur(:,1))-1,max(Xfleur(:,1))+1,min(Xfleur(:,2))-1,max(Xfleur(:,2))+1,100);
+%}
+%}
+
+
+
+
 
 
