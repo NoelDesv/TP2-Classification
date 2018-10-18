@@ -3,7 +3,12 @@ load sim_data_set;
 
 %Options ------------------------------
 options.disp = 1;
-    %op.disp = 1 -> affichage des nuages de points
+options.scatter.minx = -5;
+options.scatter.maxx = 5;
+options.scatter.miny = -5;
+options.scatter.maxy = 5;
+options.scatter.nbp = 1000;
+%op.disp = 1 -> affichage des nuages de points
 %--------------------------------------
 optimStruct.step = 0.01;
 optimStruct.tolerance=10^-6; 
@@ -69,14 +74,17 @@ for ii=1:length(species)
         Tfleur(ii,1)=3;
     end
 end
+
 Datafleur=[Xfleur Tfleur];
 [ ~, ~, ~, ~ ] = select_data(Datafleur, opt);
+methods_comparison( Xfleur, classes2oneofK(Tfleur), optimStruct, options)
+%{
 [ erreur_total] = Calcul_erreur( Datafleur );
 disp(erreur_total);
 [w,~]=fitcls(Xfleur,classes2oneofK(Tfleur));
 figure;
 plotdecr(w,min(Xfleur(:,1))-1,max(Xfleur(:,1))+1,min(Xfleur(:,2))-1,max(Xfleur(:,2))+1,100);
-
+%}
 
 
 
